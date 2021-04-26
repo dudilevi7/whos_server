@@ -1,18 +1,34 @@
-const register = async(req,res)=>{
+const authService = require('../services/authService');
+
+const register = async (req, res) => {
     try {
-         const data = req.body;
-         if (data.name === 'Dudi') throw new Error('username already exists')
-         return res.json({status : 'ok',name : data.name,id : 'g',regDate : new Date().toISOString()})
+        const { file, body: { restData } } = req;
+        const data = JSON.parse(restData);
+        const isExists = await authService.isUsernameExists(data);
+        if (isExists) throw new Error("Username already exists");
+
+        const newUser = await authService.register(data, file);
+        if (!newUser) throw new Error("User not created");
+
+        return res.json({ _id: newUser.id, username: newUser.username, img: newUser.img, highScore: { result: newUser.highScore.result, time: newUser.highScore.time } })
+
     } catch (error) {
         console.log(error)
-        res.status(400).send(error.message);
+        return res.status(400).send(error.message);
     }
 }
-const signIn = async(req,res)=>{
+const signIn = async (req, res) => {
     try {
-        return res.json('signIn is in process')
+        const data = req.body;
+        const user = await authService.signIn(data);
+        if (!user) throw new Error("User not exists!")
+        return res.json({
+            _id: user.id, username: user.username,
+            img: user.img, highScore: { result: user.highScore.result, time: user.highScore.time }
+        })
     } catch (error) {
-        
+        console.log(error)
+        res.status(400).send(error.message)
     }
 }
 
