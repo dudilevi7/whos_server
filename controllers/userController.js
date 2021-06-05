@@ -31,8 +31,30 @@ const signIn = async (req, res) => {
         res.status(400).send(error.message)
     }
 }
+const editProfile = async (req,res)=> {
 
+    try {
+        const { 
+            file, body: { restData } 
+        } = req
+        const data = JSON.parse(restData);
+
+        const isExists = await authService.isUsernameExists(data);
+        if (isExists) throw new Error("Username already exists");
+
+        const updatedUser = await authService.updateProfile(data, file);
+        if (!updatedUser) throw new Error("User not created");
+
+        return res.json({ _id: updatedUser.id, username: updatedUser.username, img: updatedUser.img, highScore: { result: updatedUser.highScore.result, time: updatedUser.highScore.time } })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(400).send(error.message);
+    }
+
+}
 module.exports = {
     register,
-    signIn
+    signIn,
+    editProfile,
 }
