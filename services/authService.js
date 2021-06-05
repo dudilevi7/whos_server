@@ -55,10 +55,31 @@ const signIn = async data => {
         console.log(error)
     }
 }
+const updateProfile = async (data, file) =>{
+    try {
+        
+        if (file) {
+            const img = await isImgValid(data.username, file);
+            if (!img)
+                throw new Error('Invalid file type or size is bigger then 100kb')
+            data.img = img;
+        }
+        let result = await User.findOneAndUpdate({username: data.preUsername } , {username: data.username, img: data.img}, {new: true});
+
+        if(!result){
+            throw new Error('cant updated user')
+        }
+        return result;
+
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 module.exports = {
     isUsernameExists,
     register,
     signIn,
-    isImgValid
+    isImgValid,
+    updateProfile,
 }
