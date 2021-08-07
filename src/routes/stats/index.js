@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const { table } = require('../controllers/statisticsController')
+const getTable = require('./get-table')
 
-router.get('/table',table)
+router.get('/get-table',getTable)
 
 module.exports = router;

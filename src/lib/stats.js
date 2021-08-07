@@ -1,9 +1,5 @@
 const User = require('../models/User');
 
-const getUsersByTable = async()=> {
-
-}
-
 const table = async() =>{
     try {
         let sortedTable = await User.aggregate([{
