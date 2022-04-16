@@ -14,11 +14,11 @@ const isUsernameExists = async data => {
 }
 
 const isImgValid = async (username, file) => {
-    if (file.detectedFileExtension !== '.jpg' || file.size >= 100000) throw new Error('Invalid file type or size is bigger then 100kb')
+    if (file.detectedFileExtension !== '.jpg' || file.size >= 1000000) throw new Error('Invalid file type or size is bigger then 100kb')
 
     const fileName = username + Math.floor(Math.random() * 1000) + file.detectedFileExtension;
     try {
-        await pipeline(file.stream, fs.createWriteStream(`${__dirname}/../public/images/${fileName}`))
+        await pipeline(file.stream, fs.createWriteStream(`./public/images/${fileName}`))
         return fileName;
     } catch (error) {
         console.log(error)
@@ -27,16 +27,25 @@ const isImgValid = async (username, file) => {
 
 const register = async (data, file) => {
     try {
-        const img = await isImgValid(data.username, file);
+        const {
+            username,
+        } = data
+        
+        const img = await isImgValid(username, file);
         if (!img)
-            throw new Error('Invalid file type or size is bigger then 100kb')
+            throw new Error('img isnt valid')
         data.img = img;
 
-        const hashPass = await bcrypt.hash(data.password, 10);
-        data.password = hashPass;
+        // const hashPass = await bcrypt.hash(data.password, 10);
+        // delete data.password
+        const password = data.password
+        delete data.password
+
         let user = new User(data);
-        let result = await user.save();
-        return result;
+        await user.setPassword(password)
+        await user.save();
+        const { user: newUser } = await User.authenticate()(username, password)
+        return newUser
 
     } catch (error) {
         console.log(error)

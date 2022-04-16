@@ -5,3 +5,4 @@
 /public/images
 
 .eslintrc.json
+.env
