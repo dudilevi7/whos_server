@@ -1,4 +1,5 @@
 const { auth } = require("../../lib");
+const whosLogger = require("../../utils/whosLogger");
 
 const editProfile = async (req, res) => {
     try {
@@ -10,11 +11,11 @@ const editProfile = async (req, res) => {
         const usernameIsExists = await auth.isUsernameExists(data);
         if (usernameIsExists) throw new Error("Username already exists");
 
-        console.debug('trying to edit profile')
+        whosLogger.info('trying to edit profile')
         const updatedUser = await auth.updateProfile(data, file);
 
         if (!updatedUser) throw new Error("edit profile has been failed");
-        console.log('edit profile has been successfully')
+        whosLogger.info('edit profile has been successfully')
 
         const {
             _id,
@@ -34,7 +35,7 @@ const editProfile = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
         return res.status(400).send(error.message);
     }
 

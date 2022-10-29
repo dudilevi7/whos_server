@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const whosLogger = require('../utils/whosLogger');
 
 const table = async() =>{
     try {
@@ -10,7 +11,7 @@ const table = async() =>{
         else 
             return sortedTable;
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
     }
 }
 

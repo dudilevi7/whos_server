@@ -1,17 +1,18 @@
 const { questions } = require('../../lib');
+const whosLogger = require('../../utils/whosLogger');
 
 const getQuestions = async(req,res)=>{
     try {
-        console.debug('trying to get the questions')
+        whosLogger.info('trying to get the questions')
         const questionsList = await questions.getQuestions();
         if (!questionsList) 
             throw new Error("failed to got the questions")
         else {
-            console.log('getting questions has been success')
+            whosLogger.info('getting questions has been success')
             res.json(questionsList)
         }
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
         res.status(400).send(error.message)
     }
 }

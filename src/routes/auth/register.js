@@ -4,17 +4,18 @@ const {
     auth,
     JWT
 } = require('../../lib')
+const whosLogger = require('../../utils/whosLogger')
 
 const register = async (req, res) => {
     try {
         const { file, body: { restData } } = req
         const data = JSON.parse(restData)
 
-        console.debug('trying to check if user exists')
+        whosLogger.info('trying to check if user exists')
         const isExists = await auth.isUsernameExists(data);
 
         if (isExists) throw new Error("Username already exists")
-        console.log('username not exists , trying to complete register of new user')
+        whosLogger.info('username not exists , trying to complete register of new user')
         
         const keys = new NodeRSA({b: 1024})
         const priv = keys.exportKey('pkcs1-private-pem')
@@ -45,7 +46,7 @@ const register = async (req, res) => {
             highScore,
         }
 
-        console.log(`user ${userId} has been created`, { user })
+        whosLogger.info(`user ${userId} has been created`, { user })
 
         const token = await JWT.sign(user, privateKey, '10h', AUTHORITY)
 
@@ -67,7 +68,7 @@ const register = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
         return res.status(400).send(error.message);
     }
 }

@@ -2,6 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 const { promisify } = require('util');
+const whosLogger = require('../utils/whosLogger');
 const pipeline = promisify(require('stream').pipeline);
 
 const isUsernameExists = async data => {
@@ -9,7 +10,7 @@ const isUsernameExists = async data => {
         let result = await User.findOne({ username: data.username });
         return result;
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
     }
 }
 
@@ -21,7 +22,7 @@ const isImgValid = async (username, file) => {
         await pipeline(file.stream, fs.createWriteStream(`./public/images/${fileName}`))
         return fileName;
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
     }
 }
 
@@ -48,7 +49,7 @@ const register = async (data, file) => {
         return newUser
 
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
     }
 }
 const signIn = async data => {
@@ -61,7 +62,7 @@ const signIn = async data => {
         } else
             throw new Error("Wrong passowrd or user not found")
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
     }
 }
 const updateProfile = async (data, file) =>{
@@ -81,7 +82,7 @@ const updateProfile = async (data, file) =>{
         return result;
 
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
     }
 }
 
