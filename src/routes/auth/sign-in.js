@@ -1,4 +1,5 @@
 const { auth } = require("../../lib");
+const whosLogger = require("../../utils/whosLogger");
 
 const signIn = async (req, res) => {
     try {
@@ -6,7 +7,7 @@ const signIn = async (req, res) => {
         const {
             username
         } = data
-        console.debug('trying to sign in', { username })
+        whosLogger.info('trying to sign in', { username })
         const user = await auth.signIn(data);
         if (!user)
             throw new Error("User not exists!")
@@ -17,7 +18,7 @@ const signIn = async (req, res) => {
             img,
             highScore,
         } = user
-        console.log('sign in has been success ,log in', { username: userName })
+        whosLogger.info('sign in has been success ,log in', { username: userName })
         
         return res.json({
             _id,
@@ -29,7 +30,7 @@ const signIn = async (req, res) => {
             },
         })
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
         res.status(400).send(error.message)
     }
 }

@@ -1,12 +1,19 @@
 const mongoose = require('mongoose');
+const { MONGODB_CONNECTION_URL } = require('../src/consts');
+const whosLogger = require('../src/utils/whosLogger');
 
 const mongooseConnect = () => {
-    mongoose.connect('mongodb://localhost:27017/whos', {useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex : true,useFindAndModify: false });
+    mongoose.connect(MONGODB_CONNECTION_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        useFindAndModify: false
+    });
 
     const db = mongoose.connection
     db.on('error', console.error.bind(console, 'connection error:'))
-    db.once('open', ()=> {
-        console.log('mongoose has been connected successfully')
+    db.once('open', () => {
+        whosLogger.info('mongoose has been connected successfully')
     });
     return db
 }

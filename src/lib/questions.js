@@ -1,4 +1,5 @@
-const Question = require('../models/Question')
+const Question = require('../models/Question');
+const whosLogger = require('../utils/whosLogger');
 
 const getQuestions = async () => {
     try {
@@ -8,7 +9,7 @@ const getQuestions = async () => {
         else
             return questions;
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
     }
 }
 const postQuestion = async data => {
@@ -27,7 +28,7 @@ const postQuestion = async data => {
         else
             return result;
     } catch (error) {
-        console.log(error)
+        whosLogger.error(error)
     }
 }
 module.exports = {
