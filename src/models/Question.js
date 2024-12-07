@@ -8,7 +8,7 @@ const Question = mongoose.model('questions', new mongoose.Schema({
     },
     type: { 
         type: String, 
-        required: true,
+        default: "regular",
     },
     answers : { 
         type: Array, 

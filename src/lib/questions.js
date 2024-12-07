@@ -12,7 +12,7 @@ const getQuestions = async () => {
         whosLogger.error(error)
     }
 }
-const postQuestion = async data => {
+const postQuestion = async (data) => {
     try {
         const {
             answers,
@@ -20,7 +20,7 @@ const postQuestion = async data => {
         } = data
 
         data.correctAnswer = answers[correctAnswerIndex]
-       
+        
         const question = new Question(data);
         const result = await question.save();
         if (!result)
