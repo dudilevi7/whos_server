@@ -15,6 +15,16 @@ const table = async() =>{
     }
 }
 
+const update = async (userId, result = 0) => {
+    try {
+        const ok = await User.findOneAndUpdate({"_id": userId }, { highScore: { time: new Date(), result } });
+        return ok;
+    }catch(err) {
+        whosLogger.error(err)
+    }
+}
+
 module.exports = {
-    table
+    table,
+    update,
 }

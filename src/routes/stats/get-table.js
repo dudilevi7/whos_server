@@ -1,7 +1,7 @@
 const { stats } = require('../../lib');
 const whosLogger = require('../../utils/whosLogger');
 
-const getTable = async(req,res)=>{
+const getTable = async(req, res)=>{
     try {
         whosLogger.info('trying to get stats table form db')
         const table = await stats.table();

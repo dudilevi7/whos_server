@@ -17,6 +17,7 @@ const signIn = async (req, res) => {
             username: userName,
             img,
             highScore,
+            role,
         } = user
         whosLogger.info('sign in has been success ,log in', { username: userName })
         
@@ -28,6 +29,7 @@ const signIn = async (req, res) => {
                 result: highScore.result,
                 time: highScore.time,
             },
+            role,
         })
     } catch (error) {
         whosLogger.error(error)

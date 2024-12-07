@@ -16,18 +16,22 @@ const register = async (req, res) => {
 
         if (isExists) throw new Error("Username already exists")
         whosLogger.info('username not exists , trying to complete register of new user')
-        
-        const keys = new NodeRSA({b: 1024})
-        const priv = keys.exportKey('pkcs1-private-pem')
-        const pub = keys.exportKey('pkcs8-public-pem')
+        const isGoogleLogin = restData.isGoogle || false;
 
-        const privateKey = Buffer.from(priv).toString('base64')
-        const publicKey = Buffer.from(pub).toString('base64')
+        if (!isGoogleLogin) {
+            const keys = new NodeRSA({b: 1024})
+            const priv = keys.exportKey('pkcs1-private-pem')
+            const pub = keys.exportKey('pkcs8-public-pem')
 
-        data.keys = {
-            publicKey,
-            privateKey,
+            const privateKey = Buffer.from(priv).toString('base64')
+            const publicKey = Buffer.from(pub).toString('base64')
+
+            data.keys = {
+                publicKey,
+                privateKey,
+            }
         }
+        data.role = "player"
 
         const newUser = await auth.register(data, file);
         if (!newUser) throw new Error("User not created")

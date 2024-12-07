@@ -25,6 +25,10 @@ const User = mongoose.model('users', new mongoose.Schema({
             default: new Date().toDateString(),
         }
     },
+    role: {
+        type: String,
+        default: 'player'
+    },
     keys: {
         privateKey: {
             type: String,
